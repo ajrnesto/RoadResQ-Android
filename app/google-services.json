@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "294167437924",
+    "project_id": "road-resq",
+    "storage_bucket": "road-resq.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294167437924:android:8201d8b0df981074e47571",
+        "android_client_info": {
+          "package_name": "com.vulcanizingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi67EqoPXOjXwKYW2Q-Ehc2Mif_cMGLKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

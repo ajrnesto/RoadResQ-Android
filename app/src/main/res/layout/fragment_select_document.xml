@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.EmptyFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?colorOnPrimary"
+                android:fontFamily="@font/raleway_medium"
+                android:paddingVertical="16dp"
+                android:text="Barangay Clearance"
+                android:textColor="?colorPrimary"
+                app:cornerRadius="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/ash_gray" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                app:dividerColor="@color/ash_gray"
+                app:layout_constraintTop_toBottomOf="@+id/btnClearance" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResidency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?colorOnPrimary"
+                android:fontFamily="@font/raleway_medium"
+                android:paddingVertical="16dp"
+                android:text="Certificate of Residency"
+                android:textColor="?colorPrimary"
+                app:cornerRadius="0dp"
+                app:iconSize="26dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnClearance"
+                app:rippleColor="@color/ash_gray" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                app:dividerColor="@color/ash_gray"
+                app:layout_constraintTop_toBottomOf="@+id/btnResidency" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIndigency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?colorOnPrimary"
+                android:fontFamily="@font/raleway_medium"
+                android:paddingVertical="16dp"
+                android:text="Certificate of Indigency"
+                android:textColor="?colorPrimary"
+                app:cornerRadius="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnResidency"
+                app:rippleColor="@color/ash_gray" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                app:dividerColor="@color/ash_gray"
+                app:layout_constraintTop_toBottomOf="@+id/btnIndigency" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBusinessPermit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?colorOnPrimary"
+                android:fontFamily="@font/raleway_medium"
+                android:paddingVertical="16dp"
+                android:text="Barangay Business Permit"
+                android:textColor="?colorPrimary"
+                app:cornerRadius="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnIndigency"
+                app:rippleColor="@color/ash_gray" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

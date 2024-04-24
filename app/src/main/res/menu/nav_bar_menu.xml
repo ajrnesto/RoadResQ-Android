@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/miServices"
+            android:icon="@drawable/screwdriver_wrench_solid"
+            android:title="Services" />
+
+        <item android:id="@+id/miShop"
+            android:icon="@drawable/shop_solid"
+            android:title="Home" />
+
+        <item android:id="@+id/miProfile"
+            android:icon="@drawable/user_solid"
+            android:title="Me" />
+    </group>
+</menu>

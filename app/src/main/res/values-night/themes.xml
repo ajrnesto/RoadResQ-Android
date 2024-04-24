@@ -1,0 +1,52 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.RoadResQ" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/auburn</item>
+        <item name="colorPrimaryVariant">@color/auburn</item>
+        <item name="colorOnPrimary">@color/timberwolf</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/lapiz_lazuli</item>
+        <item name="colorSecondaryVariant">@color/lapiz_lazuli</item>
+        <item name="colorOnSecondary">@color/timberwolf</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/timberwolf</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="App.Custom.TabTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="fontFamily">@font/raleway_medium</item>
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/timberwolf</item>
+    </style>
+
+    <style name="TextInputEditText" parent="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:fontFamily">@font/raleway_regular</item>
+        <item name="android:paddingVertical" tools:targetApi="o">18dp</item>
+        <item name="android:paddingHorizontal" tools:targetApi="o">16dp</item>
+    </style>
+
+    <style name="TextInputLayout" parent="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="hintEnabled">false</item>
+    </style>
+
+    <style name="SearchBar" parent="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="hintEnabled">false</item>
+    </style>
+</resources>

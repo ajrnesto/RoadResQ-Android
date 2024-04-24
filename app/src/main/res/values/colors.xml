@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#2C302E</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#F3F3F3</color>
+
+    <!-- custom -->
+    <color name="auburn">#A22C29</color>
+    <color name="auburn_tonal">#FFD0CE</color>
+    <color name="lapiz_lazuli">#41658A</color>
+    <color name="dark_moss_green">#4F5D2F</color>
+    <color name="timberwolf">#FFF2EC</color>
+    <color name="ash_gray">#B9BAA3</color>
+    <color name="red_gray">#E3D4D4</color>
+    <color name="dim_gray">#6D6E60</color>
+</resources>
