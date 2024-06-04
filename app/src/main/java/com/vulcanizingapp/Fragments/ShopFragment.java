@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -60,6 +64,11 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
     TextInputEditText etSearch;
     MaterialButton btnGoBackToAppointmentForm, btnRescue, btnOrders, btnCart;
     RecyclerView rvShop;
+    AutoCompleteTextView menuCategories;
+    ArrayList<String> itemsCategories;
+    ArrayList<String> itemsCategoriesId;
+    ArrayAdapter<String> adapterCategories;
+    String categorySelectedId = "-1";
 
     ArrayList<ShopItem> arrShopItem;
     ShopItemAdapter ordersAdapter;
@@ -84,7 +93,8 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
 
         initializeFirebase();
         initializeViews();
-        loadRecyclerView(null);
+        initializeSpinners();
+        loadRecyclerView(null, categorySelectedId);
         handleUserInteraction();
 
         return view;
@@ -99,9 +109,47 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
         rvShop = view.findViewById(R.id.rvShop);
         btnGoBackToAppointmentForm = view.findViewById(R.id.btnGoBackToAppointmentForm);
         btnRescue = view.findViewById(R.id.btnRescue);
+        menuCategories = view.findViewById(R.id.menuCategories);
     }
 
-    private void loadRecyclerView(String searchKey) {
+    private void initializeSpinners() {
+        itemsCategories = new ArrayList<>();
+        itemsCategoriesId = new ArrayList<>();
+
+        itemsCategories.add("All");
+        itemsCategoriesId.add("All");
+
+        itemsCategories.add("Uncategorized");
+        itemsCategoriesId.add("-1");
+        DB.collection("categories").whereNotEqualTo("categoryName", "Uncategorized").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot snapshots) {
+                for (QueryDocumentSnapshot snapshot : snapshots) {
+                    String id = snapshot.getId();
+                    String categoryName = snapshot.get("categoryName").toString();
+
+                    itemsCategoriesId.add(id);
+                    itemsCategories.add(categoryName);
+                }
+
+                adapterCategories = new ArrayAdapter<>(requireContext(), R.layout.list_item, itemsCategories);
+                menuCategories.setAdapter(adapterCategories);
+
+                menuCategories.setOnItemClickListener((adapterView, view, position, id) -> {
+                    if (position == 0) {
+                        categorySelectedId = "-1";
+                        loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase(), categorySelectedId);
+                    }
+                    else {
+                        categorySelectedId = itemsCategoriesId.get(position);
+                        loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase(), categorySelectedId);
+                    }
+                });
+            }
+        });
+    }
+
+    private void loadRecyclerView(String searchKey, String categoryId) {
         arrShopItem = new ArrayList<>();
         rvShop = view.findViewById(R.id.rvShop);
         rvShop.setHasFixedSize(true);
@@ -113,14 +161,43 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
         rvShop.setLayoutManager(gridLayoutManager);
 
-        if (searchKey == null || searchKey.isEmpty()) {
-            qryShop = DB.collection("products");
+//        if (searchKey == null || searchKey.isEmpty()) {
+//            qryShop = DB.collection("products");
+//        }
+//        else {
+//            qryShop = DB.collection("products")
+//                    .orderBy("productNameAllCaps")
+//                    .startAt(searchKey)
+//                    .endAt(searchKey+'\uf8ff');
+//        }
+
+        if (categoryId == "-1") {
+            if (searchKey == null || searchKey.isEmpty()) {
+                qryShop = DB.collection("products");
+                        //.whereNotEqualTo("stock", 0);
+            }
+            else {
+                qryShop = DB.collection("products")
+                        .orderBy("productNameAllCaps")
+                        //.whereNotEqualTo("stock", 0)
+                        .startAt(searchKey)
+                        .endAt(searchKey+'\uf8ff');
+            }
         }
         else {
-            qryShop = DB.collection("products")
-                    .orderBy("productNameAllCaps")
-                    .startAt(searchKey)
-                    .endAt(searchKey+'\uf8ff');
+            if (searchKey == null || searchKey.isEmpty()) {
+                qryShop = DB.collection("products")
+                        //.whereNotEqualTo("stock", 0)
+                        .whereEqualTo("categoryId", categoryId);
+            }
+            else {
+                qryShop = DB.collection("products")
+                        .orderBy("productNameAllCaps")
+                        .startAt(searchKey)
+                        .endAt(searchKey+'\uf8ff')
+                        //.whereNotEqualTo("stock", 0)
+                        .whereEqualTo("categoryId", categoryId);
+            }
         }
 
         qryShop.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -134,8 +211,11 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
                 arrShopItem.clear();
 
                 for (QueryDocumentSnapshot doc : value) {
-                    arrShopItem.add(doc.toObject(ShopItem.class));
-                    ordersAdapter.notifyDataSetChanged();
+                    ShopItem item = doc.toObject(ShopItem.class);
+                    if (item.getStock() > 0) {
+                        arrShopItem.add(item);
+                        ordersAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });
@@ -150,7 +230,7 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
             @Override
             public void onClick(View view) {
                 Utils.hideKeyboard(requireActivity());
-                loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase());
+                loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase(), categorySelectedId);
             }
         });
 
@@ -159,7 +239,7 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     Utils.hideKeyboard(requireActivity());
-                    loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase());
+                    loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase(), categorySelectedId);
                     return true;
                 }
                 return false;
@@ -183,6 +263,9 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
 
         btnRescue.setOnClickListener(view -> {
             btnRescue.setEnabled(false);
+
+            TextView tvActivityTitle = requireActivity().findViewById(R.id.tvActivityTitle);
+            tvActivityTitle.setText("Get Rescued");
             Utils.Cache.setBoolean(requireContext(), "sos_mode", true);
 
             DB.collection("rescue").document(AUTH.getCurrentUser().getUid())
@@ -239,7 +322,7 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 Utils.hideKeyboard(requireActivity());
-                loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase());
+                loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase(), categorySelectedId);
                 return true;
             }
             return false;
@@ -254,7 +337,7 @@ public class ShopFragment extends Fragment implements ShopItemAdapter.OnShopItem
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().isEmpty()) {
-                    loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase());
+                    loadRecyclerView(Objects.requireNonNull(etSearch.getText()).toString().toUpperCase(), categorySelectedId);
                 }
             }
 

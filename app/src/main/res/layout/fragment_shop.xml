@@ -35,6 +35,30 @@
                 tools:ignore="RtlSymmetry" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilCategories"
+            style="@style/SearchBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:endIconMode="dropdown_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilSearch">
+
+            <AutoCompleteTextView
+                android:id="@+id/menuCategories"
+                style="@style/TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Filter by Category"
+                android:inputType="none"
+                android:padding="16dp"
+                android:text="All"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnOrders"
             style="@style/Widget.Material3.Button.IconButton"
@@ -54,7 +78,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilSearch" />
+            app:layout_constraintTop_toBottomOf="@+id/tilCategories" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCart"
@@ -94,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/raleway_medium"
-            app:icon="@drawable/tower_broadcast_solid"
+            app:icon="@drawable/parachute_box_solid"
             app:layout_constraintBottom_toBottomOf="@+id/tilSearch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tilSearch"

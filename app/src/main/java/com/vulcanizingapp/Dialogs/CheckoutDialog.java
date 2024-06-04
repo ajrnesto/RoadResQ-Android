@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.vulcanizingapp.Fragments.OrdersFragment;
 import com.vulcanizingapp.Fragments.ShopFragment;
 import com.vulcanizingapp.Objects.CartItem;
 import com.vulcanizingapp.Objects.ShopItem;
@@ -147,9 +148,9 @@ public class CheckoutDialog extends AppCompatDialogFragment {
 
                                                                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                                                                                 FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
-                                                                                Fragment shopFragment = new ShopFragment();
-                                                                                fragmentTransaction.replace(R.id.fragmentHolder, shopFragment, "SHOP_FRAGMENT");
-                                                                                fragmentTransaction.addToBackStack("SHOP_FRAGMENT");
+                                                                                Fragment ordersFragment = new OrdersFragment();
+                                                                                fragmentTransaction.replace(R.id.fragmentHolder, ordersFragment, "ORDERS_FRAGMENT");
+                                                                                fragmentTransaction.addToBackStack("ORDERS_FRAGMENT");
                                                                                 fragmentTransaction.commit();
 
                                                                                 Toast.makeText(requireContext(), "Your order has been placed.", Toast.LENGTH_SHORT).show();

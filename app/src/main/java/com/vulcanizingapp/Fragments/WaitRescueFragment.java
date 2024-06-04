@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +40,7 @@ public class WaitRescueFragment extends Fragment {
     long timestamp;
     String description, status, brand, model;
     TextView tvStatusText, tvTimestamp, tvDescription, tvStatus, tvBrand, tvModel;
-    MaterialButton btnCancel;
+    MaterialButton btnChat, btnCancel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +50,18 @@ public class WaitRescueFragment extends Fragment {
         initializeFirebase();
         initializeViews();
         loadRescueDetails();
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment chatFragment = new ChatFragment();
+                fragmentTransaction.replace(R.id.fragmentHolder, chatFragment, "CHAT_FRAGMENT");
+                fragmentTransaction.addToBackStack("CHAT_FRAGMENT");
+                fragmentTransaction.commit();
+            }
+        });
 
         btnCancel.setOnClickListener(view -> DB.collection("rescue").document(AUTH.getCurrentUser().getUid())
                 .delete());
@@ -75,7 +90,9 @@ public class WaitRescueFragment extends Fragment {
                         }
 
                         if (!rescue.exists()) {
-                            requireActivity().onBackPressed();
+                            if (isAdded()) {
+                                requireActivity().onBackPressed();
+                            }
                         }
                         else {
                             long timestamp = rescue.getLong("timestamp");
@@ -103,5 +120,6 @@ public class WaitRescueFragment extends Fragment {
         tvBrand = view.findViewById(R.id.tvBrand);
         tvModel = view.findViewById(R.id.tvModel);
         btnCancel = view.findViewById(R.id.btnCancel);
+        btnChat = view.findViewById(R.id.btnChat);
     }
 }

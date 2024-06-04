@@ -103,10 +103,6 @@ public class CartFragment extends Fragment implements CartItemAdapter.OnCartItem
             btnPlaceOrder.setText("Checkout");
             btnPlaceOrder.setOnClickListener(placeOrderListener);
         }
-
-
-
-
     }
 
     @Override
@@ -158,9 +154,9 @@ public class CartFragment extends Fragment implements CartItemAdapter.OnCartItem
                                                                     public void onSuccess(Void unused) {
                                                                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                                                                         FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
-                                                                        Fragment shopFragment = new ShopFragment();
-                                                                        fragmentTransaction.replace(R.id.fragmentHolder, shopFragment, "SHOP_FRAGMENT");
-                                                                        fragmentTransaction.addToBackStack("SHOP_FRAGMENT");
+                                                                        Fragment ordersFragment = new OrdersFragment();
+                                                                        fragmentTransaction.replace(R.id.fragmentHolder, ordersFragment, "ORDERS_FRAGMENT");
+                                                                        fragmentTransaction.addToBackStack("ORDERS_FRAGMENT");
                                                                         fragmentTransaction.commit();
 
                                                                         Toast.makeText(requireContext(), "Your order has been placed.", Toast.LENGTH_SHORT).show();

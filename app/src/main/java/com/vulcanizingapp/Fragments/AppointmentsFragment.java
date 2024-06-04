@@ -156,7 +156,7 @@ public class AppointmentsFragment extends Fragment implements AppointmentAdapter
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment formAppointmentFragment = new FormAppointmentFragment();
             fragmentTransaction.replace(R.id.fragmentHolder, formAppointmentFragment, "APPOINTMENT_FORM_FRAGMENT");
-            fragmentTransaction.addToBackStack("APPOINTMENT_FORM_FRAGMENT");
+//            fragmentTransaction.addToBackStack("APPOINTMENT_FORM_FRAGMENT");
             fragmentTransaction.commit();
         });
     }

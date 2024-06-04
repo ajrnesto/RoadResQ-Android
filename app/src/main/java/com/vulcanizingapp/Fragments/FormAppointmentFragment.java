@@ -496,7 +496,15 @@ public class FormAppointmentFragment extends Fragment {
                                                                         Utils.Cache.removeKey(requireActivity().getApplicationContext(), "longitude");
                                                                         Utils.Cache.removeKey(requireActivity().getApplicationContext(), "addressLine");
                                                                         Toast.makeText(requireActivity().getApplicationContext(), "Successfully submitted", Toast.LENGTH_SHORT).show();
-                                                                        requireActivity().onBackPressed();
+
+                                                                        if (!Utils.Cache.getBoolean(requireContext(), "sos_mode")) {
+                                                                            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                                                                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                                                            Fragment appointmentsFragment = new AppointmentsFragment();
+                                                                            fragmentTransaction.replace(R.id.fragmentHolder, appointmentsFragment, "APPOINTMENTS_FRAGMENT");
+                                                                            fragmentTransaction.addToBackStack("APPOINTMENTS_FRAGMENT");
+                                                                            fragmentTransaction.commit();
+                                                                        }
                                                                     });
                                                         }
                                                     });
@@ -509,7 +517,14 @@ public class FormAppointmentFragment extends Fragment {
                         Utils.Cache.removeKey(requireActivity().getApplicationContext(), "longitude");
                         Utils.Cache.removeKey(requireActivity().getApplicationContext(), "addressLine");
                         Toast.makeText(requireActivity().getApplicationContext(), "Successfully submitted", Toast.LENGTH_SHORT).show();
-                        requireActivity().onBackPressed();
+                        if (!Utils.Cache.getBoolean(requireContext(), "sos_mode")) {
+                            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            Fragment appointmentsFragment = new AppointmentsFragment();
+                            fragmentTransaction.replace(R.id.fragmentHolder, appointmentsFragment, "APPOINTMENTS_FRAGMENT");
+                            fragmentTransaction.addToBackStack("APPOINTMENTS_FRAGMENT");
+                            fragmentTransaction.commit();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

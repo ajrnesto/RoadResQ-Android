@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -72,6 +73,24 @@ public class MainActivity extends AppCompatActivity {
         // load up default fragment
         tvActivityTitle.setText("RoadResQ");
         bottom_navbar.findViewById(R.id.miShop).performClick();
+
+        // check if user has an active rescue request
+        if (USER != null) {
+            DB.collection("rescue").document(USER.getUid())
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot snap, @Nullable FirebaseFirestoreException e) {
+                            if (!Objects.equals(snap.getString("status"), "COMPLETE")) {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                Fragment waitRescueFragment = new WaitRescueFragment();
+                                fragmentTransaction.replace(R.id.fragmentHolder, waitRescueFragment, "WAIT_RESCUE_FRAGMENT");
+                                fragmentTransaction.addToBackStack("WAIT_RESCUE_FRAGMENT");
+                                fragmentTransaction.commit();
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
@@ -92,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     private void handleUserInteraction() {
         bottom_navbar.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.miServices:
                     Utils.hideKeyboard(this);
@@ -157,11 +176,11 @@ public class MainActivity extends AppCompatActivity {
                 tvActivityTitle.setText("Your Service Appointments");
             }
             else if (formAppointmentFragment != null && formAppointmentFragment.isVisible()) {
-                if (Utils.Cache.getBoolean(getApplicationContext(), "sos_mode")) {
-                    tvActivityTitle.setText("Get Rescued");
+                if (!Utils.Cache.getBoolean(getApplicationContext(), "sos_mode")) {
+                    tvActivityTitle.setText("Book an Appointment");
                 }
                 else {
-                    tvActivityTitle.setText("Book an Appointment");
+                    tvActivityTitle.setText("Get Rescued");
                 }
             }
             else if (shopFragment != null && shopFragment.isVisible()) {
@@ -187,9 +206,9 @@ public class MainActivity extends AppCompatActivity {
                 if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                     //Instead of simply using the entire query snapshot
                     //See the actual changes to query results between query snapshots (added, removed, and modified)
-                    for (DocumentChange docChange : queryDocumentSnapshots.getDocumentChanges()) {
-                        if (docChange.getType() == DocumentChange.Type.ADDED) {
-                            buildOrdersNotification(docChange.getDocument().getString("status"));
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        if (!documentSnapshot.contains("wasNotified")) {
+                            buildOrdersNotification(documentSnapshot.getId(), documentSnapshot.getString("status"));
                         }
                     }
                 }
@@ -197,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void buildOrdersNotification(String status) {
+    private void buildOrdersNotification(String id, String status) {
+        DB.collection("orders").document(id)
+                .update("wasNotified", true);
         String notificationMessage = "";
         if (Objects.equals(status, "Ready for Pick-up")) {
             notificationMessage = "Your order is now ready for pick up";

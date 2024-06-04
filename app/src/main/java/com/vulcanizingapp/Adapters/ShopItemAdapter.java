@@ -53,6 +53,7 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.shopIt
         DecimalFormat df = new DecimalFormat("0.00");
         holder.tvPrice.setText("₱"+df.format(price));
         holder.tvName.setText(productName);
+        holder.tvStock.setText("Stock: " + stock);
 
         storageRef.child("products/"+thumbnail).getDownloadUrl()
                 .addOnSuccessListener(uri -> Picasso.get().load(uri).resize(240,240).centerInside().into(holder.ivProduct))
@@ -68,7 +69,7 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.shopIt
 
         OnShopItemListener onShopItemListener;
         AppCompatImageView ivProduct;
-        TextView tvName, tvPrice;
+        TextView tvName, tvPrice, tvStock;
 
         public shopItemViewHolder(@NonNull View itemView, OnShopItemListener onShopItemListener) {
             super(itemView);
@@ -76,6 +77,7 @@ public class ShopItemAdapter extends RecyclerView.Adapter<ShopItemAdapter.shopIt
             ivProduct = itemView.findViewById(R.id.ivProduct);
             tvName = itemView.findViewById(R.id.tvName);
             tvPrice = itemView.findViewById(R.id.tvPrice);
+            tvStock = itemView.findViewById(R.id.tvStock);
 
             this.onShopItemListener = onShopItemListener;
             itemView.setOnClickListener(this);
